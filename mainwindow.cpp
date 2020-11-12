@@ -5,7 +5,15 @@
 #include <QtGui>//для
 #include <QFileDialog>//для диалоговых окон
 
+#include "QSqlQuery"//для работы с SQL запросами
+#include "QTableView"//для работы с графическим выводом информации в виде таблиц
+#include "QSqlTableModel" //класс для работы с редактируемой одиночной таблицей из БД
+#include "QSqlRelationalTableModel" //класс для работы с редактируемой таблицей из БД с поддержкой внешних ключей
+#include "QSqlQueryModel" //класс для работы с таблицей только для чтения из БД для вывода SQL запросов
 
+static QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");// db - это внешняя глобальная переменная, которую можно использовать тво всех файлах программы
+QSqlTableModel *model = new QSqlTableModel; //создается глобальный объект модели таблицы с редактируемыми ячейками
+QSqlQueryModel *model1 = new QSqlQueryModel; //создается объект модели с таблицей только для чтения
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -13,9 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    //не работает
-    //getOpenFileName или getSaveFileName или getExistingDirectory изучить
-    QString fileName = QFileDialog::getSaveFileName(this, QString::fromUtf8("Сохранить файл"), QDir::currentPath(), "Images (*.png *.xpm *.jpg);;All files (*.*)");
+    connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(openfile())); //для выбора файла на компьютере
+
 
 }
 
@@ -24,7 +31,31 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-//не работает
-//getOpenFileName или getSaveFileName или getExistingDirectory изучить
-//QString fileName = QFileDialog::getSaveFileName(this, QString::fromUtf8("Сохранить файл"), QDir::currentPath(), "Images (*.png *.xpm *.jpg);;All files (*.*)");
+void MainWindow::openfile(){
+     //getOpenFileName или getSaveFileName или getExistingDirectory изучить
 
+    //открывает стандартное окно с файлами и можно выбрать нужный файл
+    //в переменную file помещается адрес выбранного файла
+     QString file = QFileDialog::getOpenFileName(
+                            this,
+                            "Select one or more files to open",//заголовок открывающегося стандартного окна
+                            "/home");//каталог, который открывается при запуске
+
+
+
+     //Общий код для QSqlTableModel, QSqlRelationalTableModel и QSqlQueryModel:
+     //подключить БД по ее адресу на компьютере
+     db.setDatabaseName(file);
+     //открывает базу данных по адресу file
+     db.open();
+
+     //Код для QSqlTableModel и QSqlRelationalTableModel - таблиц с редактируемыми ячейками
+     //QSqlRelationalTableModel работает также как QSqlTableModel, но позволяет настройку внешних ключей с другими таблицами
+     model->setTable("basetable");//выбирается существующая табл БД
+     //Возможны значения для редактирования записей:
+     model->setEditStrategy(QSqlTableModel::OnManualSubmit);//настраивается редактирование таблицы
+     //model->setEditStrategy(QSqlTableModel::OnFieldChange);//данные сохранятся в БД сразу при переходе на другую ячейку
+     //model->setEditStrategy(QSqlTableModel::OnRowChange);//данные сохранятся в БД сразу при переходе на другую строку
+     model->select();//заполняет модель данными из таблицы, без этого кода выйдет пустая таблица
+     ui->tableView->setModel(model);//выводит в виде таблицы все элементы в окне приложения
+}

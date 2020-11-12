@@ -14,40 +14,27 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QToolButton" name="toolButton">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>171</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Выбрать папку с БД</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>390</x>
-      <y>20</y>
-      <width>361</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Подключиться к БД и вывести таблицу в окне</string>
-    </property>
-   </widget>
    <widget class="QTableView" name="tableView">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>50</y>
+      <y>120</y>
       <width>741</width>
       <height>192</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>10</y>
+      <width>311</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Выбрать файл БД и подключиться</string>
     </property>
    </widget>
   </widget>

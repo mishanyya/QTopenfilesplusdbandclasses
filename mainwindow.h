@@ -17,5 +17,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+private slots:
+void openfile();// это созданный нами слот для выбора и открытия файла
 };
 #endif // MAINWINDOW_H
