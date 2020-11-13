@@ -2,18 +2,14 @@
 #include "ui_mainwindow.h"
 
 
-#include <QtGui>//для
-#include <QFileDialog>//для диалоговых окон
+#include "QtGui"
+#include "QFileDialog"//для диалоговых окон
 
 #include "QSqlQuery"//для работы с SQL запросами
 #include "QTableView"//для работы с графическим выводом информации в виде таблиц
 #include "QSqlTableModel" //класс для работы с редактируемой одиночной таблицей из БД
 #include "QSqlRelationalTableModel" //класс для работы с редактируемой таблицей из БД с поддержкой внешних ключей
 #include "QSqlQueryModel" //класс для работы с таблицей только для чтения из БД для вывода SQL запросов
-
-static QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");// db - это внешняя глобальная переменная, которую можно использовать тво всех файлах программы
-QSqlTableModel *model = new QSqlTableModel; //создается глобальный объект модели таблицы с редактируемыми ячейками
-QSqlQueryModel *model1 = new QSqlQueryModel; //создается объект модели с таблицей только для чтения
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -32,25 +28,21 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::openfile(){
-     //getOpenFileName или getSaveFileName или getExistingDirectory изучить
+
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");// db - это внешняя глобальная переменная, которую можно использовать тво всех файлах программы
+    QSqlTableModel *model = new QSqlTableModel; //создается глобальный объект модели таблицы с редактируемыми ячейками
 
     //открывает стандартное окно с файлами и можно выбрать нужный файл
-    //в переменную file помещается адрес выбранного файла
+    //в переменную file после выбора поместится адрес выбранного файла
      QString file = QFileDialog::getOpenFileName(
                             this,
                             "Select one or more files to open",//заголовок открывающегося стандартного окна
                             "/home");//каталог, который открывается при запуске
 
-
-
-     //Общий код для QSqlTableModel, QSqlRelationalTableModel и QSqlQueryModel:
      //подключить БД по ее адресу на компьютере
      db.setDatabaseName(file);
      //открывает базу данных по адресу file
      db.open();
-
-     //Код для QSqlTableModel и QSqlRelationalTableModel - таблиц с редактируемыми ячейками
-     //QSqlRelationalTableModel работает также как QSqlTableModel, но позволяет настройку внешних ключей с другими таблицами
      model->setTable("basetable");//выбирается существующая табл БД
      //Возможны значения для редактирования записей:
      model->setEditStrategy(QSqlTableModel::OnManualSubmit);//настраивается редактирование таблицы
