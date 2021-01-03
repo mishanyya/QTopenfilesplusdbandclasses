@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(openfile())); //для выбора файла на компьютере
+    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(openfile())); //для выбора файла на компьютере
 
 
 }
